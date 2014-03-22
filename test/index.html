@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>JSZip Testing</title>
+
+      <link media="screen" href="http://code.jquery.com/qunit/qunit-1.14.0.css" type="text/css" rel="stylesheet">
+      <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.14.0.js"></script>
+      <script>
+          // no CDN, fallback on the npm version
+          if(!window.QUnit) {
+              document.write('<link media="screen" href="../node_modules/qunitjs/qunit/qunit.css" type="text/css" rel="stylesheet">');
+              document.write('<script type="text/javascript" src="../node_modules/qunitjs/qunit/qunit.js"><\/script>');
+          }
+      </script>
+
+      <script type="text/javascript" src="../dist/jszip-utils.js"></script>
+
+      <!--
+      Mandatory in IE 6, 7, 8 and 9.
+      -->
+      <!--[if IE]>
+      <script type="text/javascript" src="../dist/jszip-utils-ie.js"></script>
+      <![endif]-->
+
+      <script type="text/javascript" src="test.js"></script>
+
+   </head>
+   <body>
+      <div id="qunit"></div>
+      <div id="qunit-fixture"></div>
+   </body>
+</html>
+<!-- enforcing Stuk's coding style -->
+<!-- vim: set shiftwidth=4 softtabstop=4 foldmethod=marker: -->

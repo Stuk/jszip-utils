@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A collection of cross-browser utilities to go along with JSZip." />
+    <title>{{page.title}}</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script> -->
+
+    <link rel="stylesheet" href="{{site.baseurl}}/documentation/css/pygments.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/documentation/css/main.css">
+
+    <script type="text/javascript" src="{{site.baseurl}}/dist/jszip-utils.js"></script>
+    <!--
+    Mandatory in IE 6, 7, 8 and 9.
+    -->
+    <!--[if IE]>
+    <script type="text/javascript" src="{{site.baseurl}}/dist/jszip-utils-ie.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="{{site.baseurl}}/"><strong>JS</strong>ZipUtils</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li {% if page.section == "api" %}class="active"{% endif %}>
+              <a href="{{site.baseurl}}/documentation/api.html">API</a>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a href="https://github.com/Stuk/jszip-utils">current version : <strong>v0.0.1</strong></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <nav class="{% if page.section %}col-md-3{% endif %}">
+        {% if page.section == "api" %}
+        <!-- <h4>Documentation</h4> -->
+        <ul class="nav">
+          <li><a href="{{site.baseurl}}/documentation/api.html">JSZipUtils</a>
+            <ul>
+              <li><a href="{{site.baseurl}}/documentation/api/getbinarycontent.html">getBinaryContent(path, callback)</a></li>
+            </ul>
+          </li>
+        </ul>
+        {% endif %}
+        </nav>
+        <div class="{% if page.section %}col-md-9{% else %}col-md-12{% endif %}">
+          <h1>{{page.title}}</h1>
+          <!-- ===================== -->
+          <!-- === C O N T E N T === -->
+          <!-- ===================== -->
+
+          {{content}}
+
+          <!-- ===================== -->
+          <!-- == / C O N T E N T == -->
+          <!-- ===================== -->
+        </div>
+      </div>
+    </div>
+    <script>
+      // FIXME find how to do that cleanly
+      (function(){
+        var tables = document.getElementsByTagName("table");
+        for(var i = 0; i < tables.length; i++) {
+          tables[i].className = "table table-condensed table-striped table-bordered";
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "jszip-utils",
+  "repo": "Stuk/jszip-utils",
+  "description": "A collection of cross-browser utilities to go along with JSZip.",
+  "version": "0.0.1",
+  "keywords": [
+    "JSZip",
+    "ajax",
+    "cross browser",
+    "IE",
+    "Internet Explorer"
+  ],
+  "main": "dist/jszip-utils.js",
+  "license": "MIT or GPLv3",
+  "scripts": [
+    "dist/jszip-utils.js"
+  ]
+}
