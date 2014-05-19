@@ -3,7 +3,7 @@
 JSZipUtils - A collection of cross-browser utilities to go along with JSZip.
 <http://stuk.github.io/jszip-utils>
 
-(c) 2014 Stuart Knightley <stuart [at] stuartk.com>
+(c) 2014 Stuart Knightley, David Duponchel
 Dual licenced under the MIT license or GPLv3. See https://raw.github.com/Stuk/jszip-utils/master/LICENSE.markdown.
 
 */
@@ -33,8 +33,6 @@ function createActiveXHR() {
     } catch( e ) {}
 }
 
-var isLocal = window.location.protocol === "file:";
-
 // Create the request object
 var createXHR = window.ActiveXObject ?
     /* Microsoft failed to properly
@@ -44,7 +42,7 @@ var createXHR = window.ActiveXObject ?
      * we need a fallback.
      */
     function() {
-    return !isLocal && createStandardXHR() || createActiveXHR();
+    return createStandardXHR() || createActiveXHR();
 } :
     // For all other browsers, use the standard XMLHttpRequest object
     createStandardXHR;
@@ -86,7 +84,7 @@ JSZipUtils.getBinaryContent = function(path, callback) {
             var file, err;
             // use `xhr` and not `this`... thanks IE
             if (xhr.readyState === 4) {
-                if (xhr.status === 200 || isLocal) {
+                if (xhr.status === 200 || xhr.status === 0) {
                     file = null;
                     err = null;
                     try {
