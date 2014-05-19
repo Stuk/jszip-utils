@@ -2,7 +2,7 @@
   "name": "jszip-utils",
   "repo": "Stuk/jszip-utils",
   "description": "A collection of cross-browser utilities to go along with JSZip.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "keywords": [
     "JSZip",
     "ajax",
