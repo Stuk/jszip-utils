@@ -16,6 +16,7 @@ name     | type     | description
 ---------|----------|------------
 path     | String   | the path to the resource to GET.
 callback | function | the callback function.
+progress | function | the progress function.
 
 The callback function has the following signature : `function (err, data) {...}` :
 
@@ -28,6 +29,19 @@ data | ArrayBuffer/String | the data in a format suitable for JSZip.
 The data can be parsed by [JSZip#load](http://stuk.github.io/jszip/#doc_load_data_options)
 or used with [JSZip#file](http://stuk.github.io/jszip/#doc_file_name_data_options)
 to add a new file. With `JSZip#file` use `{binary:true}` as options.
+
+
+The progress function has the following signature : `function (e) {...}` :
+
+
+name | type               | description
+-----|--------------------|------------
+e    | ProgressEvent      | indicates some kind of progress.
+
+The e has the following attributes:
+
+The **lengthComputable** attribute must return the value it was initialized to. When an event is created the attribute must be initialized to false.
+The **loaded** and **total** attributes must return the value they were initialized to. When an event is created the attributes must be initialized to 0.
 
 __Returns__ : Nothing.
 
@@ -56,6 +70,18 @@ JSZipUtils.getBinaryContent("path/to/picture.png", function (err, data) {
    }
    var zip = new JSZip();
    zip.file("picture.png", data, {binary:true});
+});
+
+// listening download progress
+JSZipUtils.getBinaryContent("path/to/file.zip", function (err, data) {
+   if(err) {
+      throw err; // or handle the error
+   }
+   var zip = new JSZip(data);
+}, function(e) {
+    if (e.lengthComputable) {
+      console.log(e.loaded / e.total);
+    }
 });
 ```
 
