@@ -40,6 +40,17 @@ test("JSZipUtils.getBinaryContent, image, 200 OK", function(){
     });
 });
 
+test("JSZipUtils.getBinaryContent, progress event", function() {
+    stop();
+    JSZipUtils.getBinaryContent("ref/smile.gif", function() {
+    }, function(e) {
+        if(e.lengthComputable && e.loaded === e.total) {
+            ok(true, "The content has been fetched");
+            start();
+        }
+    });
+});
+
 test("JSZipUtils.getBinaryContent, 404 NOT FOUND", function(){
     stop();
     JSZipUtils.getBinaryContent("ref/nothing", function(err, data) {
