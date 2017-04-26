@@ -34,7 +34,7 @@ function createActiveXHR() {
 }
 
 // Create the request object
-var createXHR = window.ActiveXObject ?
+var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
     /* Microsoft failed to properly
      * implement the XMLHttpRequest in IE7 (can't request local files),
      * so we use the ActiveXObject when it is available
@@ -48,8 +48,18 @@ var createXHR = window.ActiveXObject ?
     createStandardXHR;
 
 
+ 
+ function reportProgress(cb, evnt) {
+   cb({
+     percent: Math.floor(evnt.loaded*100/evnt.total),
+     loaded : evnt.loaded,
+     total : evnt.total
+   });
+ }
 
-JSZipUtils.getBinaryContent = function(path, callback) {
+
+
+JSZipUtils.getBinaryContent = function(path, callback, proggresscb) {
     /*
      * Here is the tricky part : getting the data.
      * In firefox/chrome/opera/... setting the mimeType to 'text/plain; charset=x-user-defined'
@@ -78,6 +88,9 @@ JSZipUtils.getBinaryContent = function(path, callback) {
         // older browser
         if(xhr.overrideMimeType) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
+        }
+        if (proggresscb) {
+          xhr.onprogress = reportProgress.bind(null, proggresscb);
         }
 
         xhr.onreadystatechange = function(evt) {
