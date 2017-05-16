@@ -24,28 +24,44 @@ function toString(input) {
 
 test("JSZipUtils.getBinaryContent, text, 200 OK", function(){
     stop();
-    JSZipUtils.getBinaryContent("ref/amount.txt", function(err, data) {
-        equal(err, null, "no error");
-        equal(toString(data), "\xe2\x82\xac\x31\x35\x0a", "The content has been fetched");
-        start();
+    JSZipUtils.getBinaryContent("ref/amount.txt", {
+        done: function(data) {
+            equal(toString(data), "\xe2\x82\xac\x31\x35\x0a", "The content has been fetched");
+            start();
+        },
+        fail: function(err){
+            equal(err, null, "no error");
+            start();
+        }
     });
 });
 
 test("JSZipUtils.getBinaryContent, image, 200 OK", function(){
     stop();
-    JSZipUtils.getBinaryContent("ref/smile.gif", function(err, data) {
-        equal(err, null, "no error");
-        equal(toString(data).indexOf("\x47\x49\x46\x38\x37\x61"), 0, "The content has been fetched");
-        start();
+    JSZipUtils.getBinaryContent("ref/smile.gif", {
+        done: function(data) {
+            equal(toString(data).indexOf("\x47\x49\x46\x38\x37\x61"), 0, "The content has been fetched");
+            start();
+        },
+        fail: function(err){
+            equal(err, null, "no error");
+            start();
+            
+        }
     });
 });
 
 test("JSZipUtils.getBinaryContent, 404 NOT FOUND", function(){
     stop();
-    JSZipUtils.getBinaryContent("ref/nothing", function(err, data) {
-        equal(data, null, "no error");
-        ok(err instanceof Error, "The error is an Error");
-        start();
+    JSZipUtils.getBinaryContent("ref/nothing", {
+        done: function(data) {
+            equal(data, null, "no error");
+            start();
+        },
+        fail: function(err){
+            ok(err instanceof Error, "The error is an Error");
+            start();
+        }
     });
 });
 
