@@ -100,8 +100,8 @@ JSZipUtils.getBinaryContent = function(path, cbo) {
         };
         
         if(cbo.progress) {
-            xhr.progress = function(e) {
                 cbo.progress.call(xhr, {
+            xhr.onprogress = function(e) {
                     path: path,
                     originalEvent: e,
                     percent: e.loaded / e.total * 100,
