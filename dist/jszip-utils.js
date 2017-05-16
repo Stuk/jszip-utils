@@ -50,6 +50,17 @@ var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
 
 
 JSZipUtils.getBinaryContent = function(path, cbo) {
+    //old callback style
+    if(typeof cbo==="function"){
+        var callback = cbo;
+        cbo = {
+            done: function(data){ callback(null, data); },
+            fail: function(err){ callback(err, null); }
+        };
+    }
+    
+    if(typeof cbo!=="object" || typeof cbo.done==="function" || typeof cbo.fail==="function") throw new Error("You must specify a callback.done and callback.fail");
+    
     /*
      * Here is the tricky part : getting the data.
      * In firefox/chrome/opera/... setting the mimeType to 'text/plain; charset=x-user-defined'
@@ -89,6 +100,7 @@ JSZipUtils.getBinaryContent = function(path, cbo) {
                     err = null;
                     try {
                         file = JSZipUtils._getBinaryFromXHR(xhr);
+                        cbo.done(file);
                     } catch(rr) {
                         err = new Error(rr);
                         cbo.fail(err);
@@ -100,8 +112,8 @@ JSZipUtils.getBinaryContent = function(path, cbo) {
         };
         
         if(cbo.progress) {
-                cbo.progress.call(xhr, {
             xhr.onprogress = function(e) {
+                cbo.onprogress.call(xhr, {
                     path: path,
                     originalEvent: e,
                     percent: e.loaded / e.total * 100,
