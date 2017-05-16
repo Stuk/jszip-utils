@@ -26,7 +26,7 @@
     "Internet Explorer"
   ],
   "devDependencies": {
-    "qunit": "2.0.1",
+    "qunit": "~0.5.16",
     "qunitjs": "2.0.1",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
