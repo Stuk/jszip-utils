@@ -1,4 +1,4 @@
-/*!
+/*
 
 JSZipUtils - A collection of cross-browser utilities to go along with JSZip.
 <http://stuk.github.io/jszip-utils>
@@ -34,7 +34,7 @@ function createActiveXHR() {
 }
 
 // Create the request object
-var createXHR = window.ActiveXObject ?
+var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
     /* Microsoft failed to properly
      * implement the XMLHttpRequest in IE7 (can't request local files),
      * so we use the ActiveXObject when it is available
@@ -49,7 +49,7 @@ var createXHR = window.ActiveXObject ?
 
 
 
-JSZipUtils.getBinaryContent = function(path, callback) {
+JSZipUtils.getBinaryContent = function(path, callback, auth) {
     /*
      * Here is the tricky part : getting the data.
      * In firefox/chrome/opera/... setting the mimeType to 'text/plain; charset=x-user-defined'
@@ -69,6 +69,10 @@ JSZipUtils.getBinaryContent = function(path, callback) {
         var xhr = createXHR();
 
         xhr.open('GET', path, true);
+
+        if (auth) {
+            xhr.setRequestHeader("Authorization", "Basic " + auth);
+        }
 
         // recent browsers
         if ("responseType" in xhr) {
