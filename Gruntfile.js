@@ -108,7 +108,9 @@ module.exports = function(grunt) {
       options: {
         report: 'gzip',
         mangle: true,
-        preserveComments: 'some'
+        output: {
+          comments: /^!/
+        }
       },
       "jszip-utils": {
         src: 'dist/jszip-utils.js',
