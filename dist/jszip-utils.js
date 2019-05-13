@@ -3,7 +3,7 @@
 JSZipUtils - A collection of cross-browser utilities to go along with JSZip.
 <http://stuk.github.io/jszip-utils>
 
-(c) 2014 Stuart Knightley, David Duponchel
+(c) 2014-2019 Stuart Knightley, David Duponchel
 Dual licenced under the MIT license or GPLv3. See https://raw.github.com/Stuk/jszip-utils/master/LICENSE.markdown.
 
 */
@@ -48,19 +48,18 @@ var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
     createStandardXHR;
 
 
-
-JSZipUtils.getBinaryContent = function(path, cbo) {
-    //old callback style
-    if(typeof cbo==="function"){
-        var callback = cbo;
-        cbo = {
-            done: function(data){ callback(null, data); },
-            fail: function(err){ callback(err, null); }
+/**
+ * [getBinaryContent description]
+ * @param  {string} path    The path to the resource to GET.
+ * @param  {function|{callback: function, progress: function}} options T
+ */
+JSZipUtils.getBinaryContent = function(path, options) {
+    if(typeof options === "function"){
+        options = {
+            callback: options
         };
     }
-    
-    if(typeof cbo!=="object" || typeof cbo.done==="function" || typeof cbo.fail==="function") throw new Error("You must specify a callback.done and callback.fail");
-    
+
     /*
      * Here is the tricky part : getting the data.
      * In firefox/chrome/opera/... setting the mimeType to 'text/plain; charset=x-user-defined'
@@ -76,7 +75,6 @@ JSZipUtils.getBinaryContent = function(path, cbo) {
      * the responseType attribute : http://bugs.jquery.com/ticket/11461
      */
     try {
-
         var xhr = createXHR();
 
         xhr.open('GET', path, true);
@@ -91,7 +89,7 @@ JSZipUtils.getBinaryContent = function(path, cbo) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
         }
 
-        xhr.onreadystatechange = function(event) {
+        xhr.onreadystatechange = function (event) {
             var file, err;
             // use `xhr` and not `this`... thanks IE
             if (xhr.readyState === 4) {
@@ -100,35 +98,31 @@ JSZipUtils.getBinaryContent = function(path, cbo) {
                     err = null;
                     try {
                         file = JSZipUtils._getBinaryFromXHR(xhr);
-                        cbo.done(file);
-                    } catch(rr) {
-                        err = new Error(rr);
-                        cbo.fail(err);
+                    } catch (e) {
+                        err = new Error(e);
                     }
+                    options.callback(err, file);
                 } else {
-                    cbo.fail(new Error("Ajax error for " + path + " : " + this.status + " " + this.statusText));
+                    options.callback(new Error("Ajax error for " + path + " : " + this.status + " " + this.statusText));
                 }
             }
         };
-        
-        if(cbo.progress) {
-            xhr.onprogress = function(e) {
-                cbo.onprogress.call(xhr, {
+
+        if (options.progress) {
+            xhr.onprogress = function (event) {
+                options.onprogress({
                     path: path,
-                    originalEvent: e,
-                    percent: e.loaded / e.total * 100,
-                    downloaded: e.loaded,
-                    size: e.total
+                    loaded: event.loaded,
+                    total: event.total,
+                    percent: event.loaded / event.total * 100
                 });
             };
         }
 
         xhr.send();
-        
-        return xhr;
 
     } catch (e) {
-        cbo.fail(new Error(e), null);
+        options.callback(new Error(e), null);
     }
 };
 
