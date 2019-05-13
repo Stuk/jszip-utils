@@ -34,7 +34,7 @@ function createActiveXHR() {
 }
 
 // Create the request object
-var createXHR = window.ActiveXObject ?
+var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
     /* Microsoft failed to properly
      * implement the XMLHttpRequest in IE7 (can't request local files),
      * so we use the ActiveXObject when it is available
@@ -49,7 +49,18 @@ var createXHR = window.ActiveXObject ?
 
 
 
-JSZipUtils.getBinaryContent = function(path, callback) {
+JSZipUtils.getBinaryContent = function(path, cbo) {
+    //old callback style
+    if(typeof cbo==="function"){
+        var callback = cbo;
+        cbo = {
+            done: function(data){ callback(null, data); },
+            fail: function(err){ callback(err, null); }
+        };
+    }
+    
+    if(typeof cbo!=="object" || typeof cbo.done==="function" || typeof cbo.fail==="function") throw new Error("You must specify a callback.done and callback.fail");
+    
     /*
      * Here is the tricky part : getting the data.
      * In firefox/chrome/opera/... setting the mimeType to 'text/plain; charset=x-user-defined'
@@ -80,7 +91,7 @@ JSZipUtils.getBinaryContent = function(path, callback) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
         }
 
-        xhr.onreadystatechange = function(evt) {
+        xhr.onreadystatechange = function(event) {
             var file, err;
             // use `xhr` and not `this`... thanks IE
             if (xhr.readyState === 4) {
@@ -89,20 +100,35 @@ JSZipUtils.getBinaryContent = function(path, callback) {
                     err = null;
                     try {
                         file = JSZipUtils._getBinaryFromXHR(xhr);
-                    } catch(e) {
-                        err = new Error(e);
+                        cbo.done(file);
+                    } catch(rr) {
+                        err = new Error(rr);
+                        cbo.fail(err);
                     }
-                    callback(err, file);
                 } else {
-                    callback(new Error("Ajax error for " + path + " : " + this.status + " " + this.statusText), null);
+                    cbo.fail(new Error("Ajax error for " + path + " : " + this.status + " " + this.statusText));
                 }
             }
         };
+        
+        if(cbo.progress) {
+            xhr.onprogress = function(e) {
+                cbo.onprogress.call(xhr, {
+                    path: path,
+                    originalEvent: e,
+                    percent: e.loaded / e.total * 100,
+                    downloaded: e.loaded,
+                    size: e.total
+                });
+            };
+        }
 
         xhr.send();
+        
+        return xhr;
 
     } catch (e) {
-        callback(new Error(e), null);
+        cbo.fail(new Error(e), null);
     }
 };
 
