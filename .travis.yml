@@ -6,5 +6,5 @@ env:
   matrix:
   - COMMAND=test-browser
   global:
-  - secure: MhA8GHU42X3GWTUMaqdZVvarx4BMjhQCUGNi3kvuD/iCmKVb7gMwj4jbds7AcJdsCRsRk8bBGzZs/E7HidBJMPDa5DhgLKy9EV1s42JlHq8lVzbJeWIGgrtyJvhVUkGRy2OJjnDSgh3U6elkQmvDn74jreSQc6m/yGoPFF1nqq8=
-  - secure: qREw6aUu2DnB+2reMuHgygSkumRiJvt7Z5Fz4uEVoraqbe65e4PGhtzypr9uIgCN43vxS2D5tAIeDbfid5VQrWFUQnrC9O5Z5qgVPsKN94zZ1tvYurXI4wRlAg58nNjkfGXWhLI3VUjjDTp5gYcMqgfe5hpEFYUPnUQkKGnaqAk=
+  - secure: MfDOvcCBF/82crmHtm0nfSFRIyILvKRjfozD5LT/1sAKqXE+YzZPkCX2q5heqFwNl35aQPjrRX+61Jhesl0eBtdUgabDvv+Pm8audoKm+x/OGBTogIJpmys6dk68QmzXoYNo0Dv03I0zk/MSBtGtqY6AvQrayGdNigZiH9SdBes=
+  - secure: oek18JPwaxFTaztJmXcJz+WRoPVq1WDjEXDh+0bF58jRKca8N/mGGzryy85u+DW/xAI50fsiVoiwB2F99z38lHdzpNC5HL9P6C6bdxNddj1bQmcGRiYXAHk43svPP8qVBfjNkwaf1SGGvdtXk3RCD23S51nzI2rjkyzv5/PEQJA=
