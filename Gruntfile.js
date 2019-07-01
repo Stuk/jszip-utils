@@ -1,43 +1,42 @@
 /*jshint node: true */
 module.exports = function(grunt) {
   var browsers = [{
-      browserName: "iphone",
-      platform: "OS X 10.8",
-      version: "6"
+      // browserName: "iphone",
+      // version: "10.3"
   }, {
       browserName: "android",
       platform: "Linux",
       version: "4.0"
-  }, {
-      browserName: "firefox",
-      platform: "XP"
-  }, {
-      browserName: "chrome",
-      platform: "XP"
-  }, {
-      browserName: "internet explorer",
-      platform: "WIN8",
-      version: "10"
-  }, {
-      browserName: "internet explorer",
-      platform: "VISTA",
-      version: "9"
-  }, {
-      browserName: "internet explorer",
-      platform: "Windows 7",
-      version: "8"
-  }, {
-      browserName: "internet explorer",
-      platform: "XP",
-      version: "7"
-  }, {
-      browserName: "opera",
-      platform: "Windows 2008",
-      version: "12"
-  }, {
-      browserName: "safari",
-      platform: "OS X 10.8",
-      version: "6"
+  // }, {
+  //     browserName: "firefox",
+  //     platform: "XP"
+  // }, {
+  //     browserName: "chrome",
+  //     platform: "XP"
+  // }, {
+  //     browserName: "internet explorer",
+  //     platform: "WIN8",
+  //     version: "10"
+  // }, {
+  //     browserName: "internet explorer",
+  //     platform: "VISTA",
+  //     version: "9"
+  // }, {
+  //     browserName: "internet explorer",
+  //     platform: "Windows 7",
+  //     version: "8"
+  // }, {
+  //     browserName: "internet explorer",
+  //     platform: "XP",
+  //     version: "7"
+  // }, {
+  //     browserName: "opera",
+  //     platform: "Windows 2008",
+  //     version: "12"
+  // }, {
+  //     browserName: "safari",
+  //     platform: "OS X 10.8",
+  //     version: "6"
   }];
 
   var tags = [];
