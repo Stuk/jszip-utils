@@ -48,6 +48,7 @@ module.exports = function(grunt) {
                   // Tests have statusCheckAttempts * pollInterval seconds to complete
                   pollInterval: 2000,
                   statusCheckAttempts: 15,
+                  "max-duration": 30,
                   browsers: browsers,
                   maxRetries: 2
               }
