@@ -9,7 +9,7 @@ module.exports = function(grunt) {
   var browsers = [
     {browserName: "chrome"},
     {browserName: "firefox", platform: "Linux"},
-    {browserName: "internet explorer"},
+    {browserName: "internet explorer"}
   ];
 
   var tags = [];
@@ -104,11 +104,20 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
+  // A task to cause Grunt to sit and wait, keeping the test server running
+  grunt.registerTask("wait", function() {
+    this.async();
+  });
+
+  grunt.registerTask("test-local", ["build", "connect", "wait"]);
+  grunt.registerTask("test-remote", ["build", "connect", "saucelabs-qunit"]);
+
   if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
-    grunt.registerTask("test", ["connect", "saucelabs-qunit"]);
+    grunt.registerTask("test", ["jshint", "test-remote"]);
   } else {
-    grunt.registerTask("test", []);
+    grunt.registerTask("test", ["jshint", "test-local"]);
   }
+
   grunt.registerTask("build", ["browserify", "uglify"]);
   grunt.registerTask("default", ["jshint", "build"]);
 };

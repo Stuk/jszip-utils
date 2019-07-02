@@ -16,6 +16,13 @@ Mandatory in IE 6, 7, 8 and 9.
 <![endif]-->
 ```
 
+Development
+-----------
+
+Run `npm test` to lint, build, and launch a server at http://localhost:8080/test/ . Open the page in a browser to verify that the tests are passing.
+
+If you have a Saucelabs account set the `SAUCE_USERNAME` and `SAUCE_ACCESS_KEY`environment variables to test remotely.
+
 License
 -------
 
