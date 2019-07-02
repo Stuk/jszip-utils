@@ -14,8 +14,39 @@
           }
       </script>
 
-      <script type="text/javascript" src="../dist/jszip-utils.js"></script>
+      <script type="text/javascript">
+        // Exposes test results for Saucelabs. See
+        // https://wiki.saucelabs.com/display/DOCS/Reporting+JavaScript+Unit+Test+Results+to+Sauce+Labs+Using+QUnit
+        // and
+        // https://wiki.saucelabs.com/display/DOCS/Reporting+JavaScript+Unit+Test+Results+to+Sauce+Labs+Using+a+Custom+Framework
+        (function () {
+          var log = [];
+          var testName;
 
+          QUnit.done(function (test_results) {
+            debugger;
+            var tests = [];
+            for(var i = 0, len = log.length; i < len; i++) {
+              var details = log[i];
+              tests.push({
+                name: details.name,
+                result: details.result,
+                message: details.message,
+                duration: details.runtime
+              });
+            }
+            test_results.tests = tests;
+            test_results.duration = test_results.runtime;
+
+            window.global_test_results = test_results;
+          });
+          QUnit.log(function(details){
+              log.push(details);
+          });
+        })()
+      </script>
+
+      <script type="text/javascript" src="../dist/jszip-utils.js"></script>
       <!--
       Mandatory in IE 6, 7, 8 and 9.
       -->
