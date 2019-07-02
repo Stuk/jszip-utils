@@ -41,7 +41,7 @@ module.exports = function(grunt) {
     'saucelabs-qunit': {
       all: {
         options: {
-          urls: ["http://127.0.0.1:8080/test/index.html"],
+          urls: ["http://127.0.0.1:8080/test/index.html?hidepassed"],
           build: process.env.TRAVIS_JOB_ID,
           testname: "qunit tests",
           tags: tags,
