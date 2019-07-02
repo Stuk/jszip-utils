@@ -20,46 +20,46 @@ module.exports = function(grunt) {
   }
 
   var postBundleWithLicense = function(err, src, done) {
-      if (!err) {
-          // add the license
-          var license = require('fs').readFileSync('lib/license_header.js');
-          done(err, license + src);
-      } else {
-          done(err);
-      }
+    if (!err) {
+      // add the license
+      var license = require('fs').readFileSync('lib/license_header.js');
+      done(err, license + src);
+    } else {
+      done(err);
+    }
   };
 
   grunt.initConfig({
-      connect: {
-          server: {
-              options: {
-                  base: "",
-                  port: 8080
-              }
-          }
+    connect: {
+      server: {
+        options: {
+          base: "",
+          port: 8080
+        }
+      }
+    },
+    'saucelabs-qunit': {
+      all: {
+        options: {
+          urls: ["http://127.0.0.1:8080/test/index.html"],
+          build: process.env.TRAVIS_JOB_ID,
+          testname: "qunit tests",
+          tags: tags,
+          // Tests have statusCheckAttempts * pollInterval seconds to complete
+          pollInterval: 2000,
+          statusCheckAttempts: 15,
+          "max-duration": 30,
+          browsers: browsers,
+          maxRetries: 2
+        }
+      }
+    },
+    jshint: {
+      options: {
+        jshintrc: "./.jshintrc"
       },
-      'saucelabs-qunit': {
-          all: {
-              options: {
-                  urls: ["http://127.0.0.1:8080/test/index.html"],
-                  build: process.env.TRAVIS_JOB_ID,
-                  testname: "qunit tests",
-                  tags: tags,
-                  // Tests have statusCheckAttempts * pollInterval seconds to complete
-                  pollInterval: 2000,
-                  statusCheckAttempts: 15,
-                  "max-duration": 30,
-                  browsers: browsers,
-                  maxRetries: 2
-              }
-          }
-      },
-      jshint: {
-            options: {
-                jshintrc: "./.jshintrc"
-            },
-            all: ['./lib/*.js']
-        },
+      all: ['./lib/*.js', "Gruntfile.js"]
+    },
     browserify: {
       "utils": {
         files: {
