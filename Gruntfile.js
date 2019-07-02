@@ -1,48 +1,16 @@
 /*jshint node: true */
 "use strict";
+
 module.exports = function(grunt) {
-  // see https://saucelabs.com/rest/v1/info/browsers/webdriver
-  var browsers = [{
-      browserName: "Safari",
-      deviceName: "iPhone 5 Simulator",
-      deviceOrientation: "portrait",
-      platformVersion: "10.3",
-      platformName: "iOS"
-  // }, {
-  //     browserName: "android",
-  //     platform: "Linux",
-  //     version: "4.0"
-  // }, {
-  //     browserName: "firefox",
-  //     platform: "XP"
-  // }, {
-  //     browserName: "chrome",
-  //     platform: "XP"
-  // }, {
-  //     browserName: "internet explorer",
-  //     platform: "WIN8",
-  //     version: "10"
-  // }, {
-  //     browserName: "internet explorer",
-  //     platform: "VISTA",
-  //     version: "9"
-  // }, {
-  //     browserName: "internet explorer",
-  //     platform: "Windows 7",
-  //     version: "8"
-  // }, {
-  //     browserName: "internet explorer",
-  //     platform: "XP",
-  //     version: "7"
-  // }, {
-  //     browserName: "opera",
-  //     platform: "Windows 2008",
-  //     version: "12"
-  // }, {
-  //     browserName: "safari",
-  //     platform: "OS X 10.8",
-  //     version: "6"
-  }];
+  // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator
+  // A lot of the browsers seem to time out with Saucelab's unit testing
+  // framework. Here are the browsers that work that get enough coverage for our
+  // needs.
+  var browsers = [
+    {browserName: "chrome"},
+    {browserName: "firefox", platform: "Linux"},
+    {browserName: "internet explorer"},
+  ];
 
   var tags = [];
   if (process.env.TRAVIS_PULL_REQUEST && process.env.TRAVIS_PULL_REQUEST != "false") {
@@ -66,20 +34,22 @@ module.exports = function(grunt) {
           server: {
               options: {
                   base: "",
-                  port: 9999
+                  port: 8080
               }
           }
       },
       'saucelabs-qunit': {
           all: {
               options: {
-                  urls: ["http://127.0.0.1:9999/test/index.html"],
-                  tunnelTimeout: 5,
+                  urls: ["http://127.0.0.1:8080/test/index.html"],
                   build: process.env.TRAVIS_JOB_ID,
-                  concurrency: 3,
-                  browsers: browsers,
                   testname: "qunit tests",
-                  tags: tags
+                  tags: tags,
+                  // Tests have statusCheckAttempts * pollInterval seconds to complete
+                  pollInterval: 2000,
+                  statusCheckAttempts: 15,
+                  browsers: browsers,
+                  maxRetries: 2
               }
           }
       },
