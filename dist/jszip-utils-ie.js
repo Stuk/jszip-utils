@@ -1,4 +1,4 @@
-/*!
+/*@preserve
 
 JSZipUtils - A collection of cross-browser utilities to go along with JSZip.
 <http://stuk.github.io/jszip-utils>

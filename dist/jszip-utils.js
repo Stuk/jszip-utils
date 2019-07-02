@@ -1,4 +1,4 @@
-/*!
+/*@preserve
 
 JSZipUtils - A collection of cross-browser utilities to go along with JSZip.
 <http://stuk.github.io/jszip-utils>
@@ -9,6 +9,7 @@ Dual licenced under the MIT license or GPLv3. See https://raw.github.com/Stuk/js
 */
 !function(e){"object"==typeof exports?module.exports=e():"function"==typeof define&&define.amd?define(e):"undefined"!=typeof window?window.JSZipUtils=e():"undefined"!=typeof global?global.JSZipUtils=e():"undefined"!=typeof self&&(self.JSZipUtils=e())}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
+/*globals Promise */
 
 var JSZipUtils = {};
 // just use the responseText with xhr1, response with xhr2.
@@ -49,15 +50,34 @@ var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
 
 
 /**
- * [getBinaryContent description]
  * @param  {string} path    The path to the resource to GET.
  * @param  {function|{callback: function, progress: function}} options T
  */
-JSZipUtils.getBinaryContent = function(path, options) {
-    if(typeof options === "function"){
-        options = {
-            callback: options
-        };
+JSZipUtils.getBinaryContent = function (path, options) {
+    var promise, resolve, reject;
+    var callback;
+
+    if (!options) {
+        options = {};
+    }
+
+    // backward compatible callback
+    if (typeof options === "function") {
+        callback = options;
+        options = {};
+    } else if (typeof options.callback === 'function') {
+        // callback inside options object
+        callback = options.callback;
+    }
+
+    if (!callback && typeof Promise !== "undefined") {
+        promise = new Promise(function (_resolve, _reject) {
+            resolve = _resolve;
+            reject = _reject;
+        });
+    } else {
+        resolve = function (data) { callback(null, data); };
+        reject = function (err) { callback(err, null); };
     }
 
     /*
@@ -90,31 +110,28 @@ JSZipUtils.getBinaryContent = function(path, options) {
         }
 
         xhr.onreadystatechange = function (event) {
-            var file, err;
             // use `xhr` and not `this`... thanks IE
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
-                    file = null;
-                    err = null;
                     try {
-                        file = JSZipUtils._getBinaryFromXHR(xhr);
-                    } catch (e) {
-                        err = new Error(e);
+                        resolve(JSZipUtils._getBinaryFromXHR(xhr));
+                    } catch(err) {
+                        reject(new Error(err));
                     }
-                    options.callback(err, file);
                 } else {
-                    options.callback(new Error("Ajax error for " + path + " : " + this.status + " " + this.statusText));
+                    reject(new Error("Ajax error for " + path + " : " + this.status + " " + this.statusText));
                 }
             }
         };
 
-        if (options.progress) {
-            xhr.onprogress = function (event) {
-                options.onprogress({
+        if(options.progress) {
+            xhr.onprogress = function(e) {
+                options.progress({
                     path: path,
-                    loaded: event.loaded,
-                    total: event.total,
-                    percent: event.loaded / event.total * 100
+                    originalEvent: e,
+                    percent: e.loaded / e.total * 100,
+                    loaded: e.loaded,
+                    total: e.total
                 });
             };
         }
@@ -122,8 +139,12 @@ JSZipUtils.getBinaryContent = function(path, options) {
         xhr.send();
 
     } catch (e) {
-        options.callback(new Error(e), null);
+        reject(new Error(e), null);
     }
+
+    // returns a promise or undefined depending on whether a callback was
+    // provided
+    return promise;
 };
 
 // export

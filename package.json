@@ -35,7 +35,7 @@
     "grunt-contrib-uglify": "~4.0.1",
     "grunt-saucelabs": "Stuk/grunt-saucelabs#v10.0.0",
     "jshint": "~2.1.11",
-    "qunit": "~0.5.16",
+    "qunit": "~2.9.2",
     "qunitjs": "2.0.1"
   },
   "license": "(MIT OR GPL-3.0)"
