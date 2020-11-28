@@ -54,6 +54,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    qunit: {
+      all: {
+        options: {
+          urls: ["http://127.0.0.1:8080/test/index.html"],
+          puppeteer: {
+            args: ["--no-sandbox"]
+          }
+        }
+      }
+    },
     jshint: {
       options: {
         jshintrc: "./.jshintrc"
@@ -103,13 +113,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
 
   // A task to cause Grunt to sit and wait, keeping the test server running
   grunt.registerTask("wait", function() {
     this.async();
   });
 
-  grunt.registerTask("test-local", ["build", "connect", "wait"]);
+  grunt.registerTask("test-local", ["build", "connect", "qunit"]);
+  grunt.registerTask("test-debug", ["build", "connect", "wait"]);
   grunt.registerTask("test-remote", ["build", "connect", "saucelabs-qunit"]);
 
   if (process.env.SAUCE_USERNAME && process.env.SAUCE_ACCESS_KEY) {
@@ -119,5 +131,4 @@ module.exports = function(grunt) {
   }
 
   grunt.registerTask("build", ["browserify", "uglify"]);
-  grunt.registerTask("default", ["jshint", "build"]);
 };

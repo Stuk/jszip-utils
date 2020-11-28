@@ -1,10 +1,7 @@
 language: node_js
 node_js:
-- '8'
-script: npm run $COMMAND
-env:
-  matrix:
-  - COMMAND=test-browser
-  global:
-  - secure: MfDOvcCBF/82crmHtm0nfSFRIyILvKRjfozD5LT/1sAKqXE+YzZPkCX2q5heqFwNl35aQPjrRX+61Jhesl0eBtdUgabDvv+Pm8audoKm+x/OGBTogIJpmys6dk68QmzXoYNo0Dv03I0zk/MSBtGtqY6AvQrayGdNigZiH9SdBes=
-  - secure: oek18JPwaxFTaztJmXcJz+WRoPVq1WDjEXDh+0bF58jRKca8N/mGGzryy85u+DW/xAI50fsiVoiwB2F99z38lHdzpNC5HL9P6C6bdxNddj1bQmcGRiYXAHk43svPP8qVBfjNkwaf1SGGvdtXk3RCD23S51nzI2rjkyzv5/PEQJA=
+- '10'
+script: npm test
+global:
+- secure: MfDOvcCBF/82crmHtm0nfSFRIyILvKRjfozD5LT/1sAKqXE+YzZPkCX2q5heqFwNl35aQPjrRX+61Jhesl0eBtdUgabDvv+Pm8audoKm+x/OGBTogIJpmys6dk68QmzXoYNo0Dv03I0zk/MSBtGtqY6AvQrayGdNigZiH9SdBes=
+- secure: oek18JPwaxFTaztJmXcJz+WRoPVq1WDjEXDh+0bF58jRKca8N/mGGzryy85u+DW/xAI50fsiVoiwB2F99z38lHdzpNC5HL9P6C6bdxNddj1bQmcGRiYXAHk43svPP8qVBfjNkwaf1SGGvdtXk3RCD23S51nzI2rjkyzv5/PEQJA=
