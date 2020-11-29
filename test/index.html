@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta charset="UTF-8" />
       <title>JSZip Testing</title>
-      <link media="screen" href="../node_modules/qunit/qunit/qunit.css" type="text/css" rel="stylesheet">
-      <script type="text/javascript" src="../node_modules/qunit/qunit/qunit.js"></script>
+      <link rel="stylesheet" href="../node_modules/qunit/qunit/qunit.css">
+      <script src="../node_modules/qunit/qunit/qunit.js"></script>
 
-      <script type="text/javascript">
+      <script>
         // Exposes test results for Saucelabs. See
         // https://wiki.saucelabs.com/display/DOCS/Setting+Up+JavaScript+Unit+Testing+Frameworks
         (function () {
@@ -35,15 +35,15 @@
         })()
       </script>
 
-      <script type="text/javascript" src="../dist/jszip-utils.js"></script>
+      <script src="../dist/jszip-utils.js"></script>
       <!--
       Mandatory in IE 6, 7, 8 and 9.
       -->
       <!--[if IE]>
-      <script type="text/javascript" src="../dist/jszip-utils-ie.js"></script>
+      <script src="../dist/jszip-utils-ie.js"></script>
       <![endif]-->
 
-      <script type="text/javascript" src="test.js"></script>
+      <script src="test.js"></script>
 
    </head>
    <body>

@@ -4,8 +4,8 @@
   "author": "Stuart Knightley <stuart@stuartk.com>",
   "description": "A collection of cross-browser utilities to go along with JSZip.",
   "scripts": {
-    "test": "npm run test-browser",
-    "test-browser": "grunt build && grunt test",
+    "test": "grunt test",
+    "test-debug": "grunt test-debug",
     "lint": "grunt jshint"
   },
   "main": "./lib/index",
@@ -32,11 +32,11 @@
     "grunt-cli": "~0.1.9",
     "grunt-contrib-connect": "~2.0.0",
     "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-qunit": "^4.0.0",
     "grunt-contrib-uglify": "~4.0.1",
     "grunt-saucelabs": "Stuk/grunt-saucelabs#v10.0.0",
     "jshint": "~2.1.11",
-    "qunit": "~2.9.2",
-    "qunitjs": "2.0.1"
+    "qunit": "~2.12.0"
   },
   "license": "(MIT OR GPL-3.0)"
 }
