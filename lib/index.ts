@@ -1,15 +1,13 @@
-'use strict';
 /*globals Promise */
 
-var JSZipUtils = {};
 // just use the responseText with xhr1, response with xhr2.
 // The transformation doesn't throw away high-order byte (with responseText)
 // because JSZip handles that case. If not used with JSZip, you may need to
 // do it, see https://developer.mozilla.org/En/Using_XMLHttpRequest#Handling_binary_data
-JSZipUtils._getBinaryFromXHR = function (xhr) {
+function _getBinaryFromXHR(xhr: XMLHttpRequest) {
     // for xhr.responseText, the 0xFF mask is applied by JSZip
     return xhr.response || xhr.responseText;
-};
+}
 
 // taken from jQuery
 function createStandardXHR() {
@@ -25,7 +23,7 @@ function createActiveXHR() {
 }
 
 // Create the request object
-var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
+const createXHR: () => XMLHttpRequest = (typeof window !== "undefined" && window.ActiveXObject) ?
     /* Microsoft failed to properly
      * implement the XMLHttpRequest in IE7 (can't request local files),
      * so we use the ActiveXObject when it is available
@@ -38,37 +36,50 @@ var createXHR = (typeof window !== "undefined" && window.ActiveXObject) ?
     // For all other browsers, use the standard XMLHttpRequest object
     createStandardXHR;
 
+type CallbackData = string | ArrayBuffer;
+
+type GetBinaryContentCallback = (err: null | Error, data: null | CallbackData) => void;
+
+interface GetBinaryContentProgressData {
+    path: string;
+    originalEvent: ProgressEvent;
+    percent: number;
+    loaded: ProgressEvent['loaded'];
+    total: ProgressEvent['total'];
+}
+
+type GetBinaryContentProgress = (data: GetBinaryContentProgressData) => void;
+
+type GetBinaryContentOptions = {
+    callback: GetBinaryContentCallback;
+    progress?: GetBinaryContentProgress;
+};
 
 /**
  * @param  {string} path    The path to the resource to GET.
  * @param  {function|{callback: function, progress: function}} options
  * @return {Promise|undefined} If no callback is passed then a promise is returned
  */
-JSZipUtils.getBinaryContent = function (path, options) {
-    var promise, resolve, reject;
-    var callback;
-
-    if (!options) {
-        options = {};
-    }
-
-    // backward compatible callback
-    if (typeof options === "function") {
-        callback = options;
-        options = {};
-    } else if (typeof options.callback === 'function') {
+function getBinaryContent(path: string, options?: never): Promise<CallbackData>;
+function getBinaryContent(path: string, options: GetBinaryContentCallback | GetBinaryContentOptions): void;
+function getBinaryContent(path: string, options?: GetBinaryContentCallback | GetBinaryContentOptions): Promise<CallbackData> | void {
+    const callback = typeof options === 'object'
         // callback inside options object
-        callback = options.callback;
-    }
+        ? options.callback
+        // backward compatible callback or undefined callback (when call async)
+        : options;
 
+    const progress = typeof options === 'object' ? options.progress : undefined;
+
+    let promise: Promise<CallbackData> | undefined;
+
+    let resolve = (data: CallbackData) => { callback?.(null, data); };
+    let reject = (err: Error) => { callback?.(err, null); };
     if (!callback && typeof Promise !== "undefined") {
-        promise = new Promise(function (_resolve, _reject) {
+        promise = new Promise((_resolve, _reject) => {
             resolve = _resolve;
             reject = _reject;
         });
-    } else {
-        resolve = function (data) { callback(null, data); };
-        reject = function (err) { callback(err, null); };
     }
 
     /*
@@ -86,7 +97,7 @@ JSZipUtils.getBinaryContent = function (path, options) {
      * the responseType attribute : http://bugs.jquery.com/ticket/11461
      */
     try {
-        var xhr = createXHR();
+        const xhr = createXHR();
 
         xhr.open('GET', path, true);
 
@@ -100,7 +111,7 @@ JSZipUtils.getBinaryContent = function (path, options) {
             xhr.overrideMimeType("text/plain; charset=x-user-defined");
         }
 
-        xhr.onreadystatechange = function (event) {
+        xhr.onreadystatechange = function () {
             // use `xhr` and not `this`... thanks IE
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
@@ -115,27 +126,30 @@ JSZipUtils.getBinaryContent = function (path, options) {
             }
         };
 
-        if(options.progress) {
-            xhr.onprogress = function(e) {
-                options.progress({
-                    path: path,
-                    originalEvent: e,
-                    percent: e.loaded / e.total * 100,
-                    loaded: e.loaded,
-                    total: e.total
-                });
-            };
-        }
+        xhr.onprogress = (event) => {
+            progress?.({
+                path: path,
+                originalEvent: event,
+                percent: event.loaded / event.total * 100,
+                loaded: event.loaded,
+                total: event.total
+            });
+        };
 
         xhr.send();
 
     } catch (e) {
-        reject(new Error(e), null);
+        reject(new Error(e));
     }
 
     // returns a promise or undefined depending on whether a callback was
     // provided
     return promise;
+}
+
+const JSZipUtils = {
+    _getBinaryFromXHR,
+    getBinaryContent,
 };
 
 // export

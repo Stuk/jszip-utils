@@ -63,10 +63,15 @@ module.exports = function(grunt) {
     browserify: {
       "utils": {
         files: {
-          'dist/jszip-utils.js': ['lib/index.js']
+          'dist/jszip-utils.js': ['lib/index.ts']
         },
         options: {
-          standalone: 'JSZipUtils',
+          configure: function (bundler) {
+            bundler.plugin(require('tsify'));
+          },
+          browserifyOptions: {
+            standalone: 'JSZipUtils'
+          },
           postBundleCB: postBundleWithLicense
         }
       },

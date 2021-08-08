@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es3",
+    "strict": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es2015.promise",
+      "scripthost"
+    ]
+  }
+}
