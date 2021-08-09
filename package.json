@@ -8,7 +8,8 @@
     "test-browser": "grunt build && grunt test",
     "lint": "grunt jshint"
   },
-  "main": "./lib/index",
+  "main": "./dist/jszip-utils.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Stuk/jszip-utils.git"
@@ -26,17 +27,20 @@
     "Internet Explorer"
   ],
   "devDependencies": {
-    "browserify": "~2.35.0",
+    "@types/node": "~16.4.13",
     "grunt": "~0.4.1",
-    "grunt-browserify": "~1.3.0",
+    "grunt-browserify": "~6.0.0",
     "grunt-cli": "~0.1.9",
     "grunt-contrib-connect": "~2.0.0",
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-contrib-uglify": "~4.0.1",
     "grunt-saucelabs": "Stuk/grunt-saucelabs#v10.0.0",
+    "grunt-shell": "^3.0.1",
     "jshint": "~2.1.11",
     "qunit": "~2.9.2",
-    "qunitjs": "2.0.1"
+    "qunitjs": "2.0.1",
+    "tsify": "~5.0.4",
+    "typescript": "~4.3.5"
   },
   "license": "(MIT OR GPL-3.0)"
 }
