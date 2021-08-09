@@ -100,6 +100,11 @@ module.exports = function(grunt) {
         src: 'dist/jszip-utils-ie.js',
         dest: 'dist/jszip-utils-ie.min.js'
       }
+    },
+    shell: {
+      "ts-declaration": {
+        command: "tsc lib/index.ts --declaration --emitDeclarationOnly --outDir './dist'"
+      }
     }
   });
 
@@ -108,6 +113,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-shell');
 
   // A task to cause Grunt to sit and wait, keeping the test server running
   grunt.registerTask("wait", function() {
@@ -123,6 +129,6 @@ module.exports = function(grunt) {
     grunt.registerTask("test", ["jshint", "test-local"]);
   }
 
-  grunt.registerTask("build", ["browserify", "uglify"]);
+  grunt.registerTask("build", ["browserify", "uglify", "shell:ts-declaration"]);
   grunt.registerTask("default", ["jshint", "build"]);
 };

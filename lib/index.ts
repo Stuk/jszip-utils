@@ -38,7 +38,10 @@ const createXHR: () => XMLHttpRequest = (typeof window !== "undefined" && window
 
 type CallbackData = string | ArrayBuffer;
 
-type GetBinaryContentCallback = (err: null | Error, data: null | CallbackData) => void;
+interface GetBinaryContentCallback {
+    (err: null, data: CallbackData): void;
+    (err: Error, data: null): void;
+}
 
 interface GetBinaryContentProgressData {
     path: string;
@@ -154,6 +157,7 @@ const JSZipUtils = {
 
 // export
 module.exports = JSZipUtils;
+export default JSZipUtils;
 
 // enforcing Stuk's coding style
 // vim: set shiftwidth=4 softtabstop=4:

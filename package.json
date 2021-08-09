@@ -8,7 +8,8 @@
     "test-browser": "grunt build && grunt test",
     "lint": "grunt jshint"
   },
-  "main": "./lib/index",
+  "main": "./dist/jszip-utils.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/Stuk/jszip-utils.git"
@@ -34,6 +35,7 @@
     "grunt-contrib-jshint": "~0.6.4",
     "grunt-contrib-uglify": "~4.0.1",
     "grunt-saucelabs": "Stuk/grunt-saucelabs#v10.0.0",
+    "grunt-shell": "^3.0.1",
     "jshint": "~2.1.11",
     "qunit": "~2.9.2",
     "qunitjs": "2.0.1",
